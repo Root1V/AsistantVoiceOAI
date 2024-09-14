@@ -1,0 +1,6 @@
+{
+    "model": "gpt-4o-mini",
+    "model_embeddings": "text-embedding-3-large",
+    "temperature":0.1,
+    "max_tokens": 500
+}
