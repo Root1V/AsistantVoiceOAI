@@ -1,13 +1,26 @@
-from openai import OpenAI
+from streamlit_mic_recorder import speech_to_text
+from langchain_openai import ChatOpenAI
+import streamlit as st
+
 from dotenv import load_dotenv
 from app.config import Config
-
 
 class App:
 
     def __init__(self) -> None:
         self.config = Config.get_all()
-        self.client = OpenAI()
+        self.client = ChatOpenAI(model=self.config["model"])
+
+    def show(self):
+        st.title("Tu asistente de voz Elysia")
+        st.write("App chat habilitada por voz")
+        text = speech_to_text(language="es", use_container_width=True, just_once=False, key="STT")
+
+        if text:
+            st.write("Tu:", text)
+            response = self.client.invoke(text)
+            st.write("Respuesta del modelo:", response.content)
+
 
     def generate_text(self, prompt):
         """Generar texto con el modelo LLM GTP-4o-mini"""
@@ -26,4 +39,3 @@ class App:
 
 if __name__ == "__main__":
     load_dotenv()
-    prompt = "Escribe una historia sobre inteligencia artificial."
